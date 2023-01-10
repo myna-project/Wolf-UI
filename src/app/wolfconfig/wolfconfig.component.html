@@ -1,0 +1,55 @@
+<mat-progress-bar *ngIf="isLoading || isSaving" mode="indeterminate"></mat-progress-bar>
+<div class="main-container">
+  <h2>{{ 'WOLFCONFIG.TITLE' | translate}}</h2>
+  <mat-divider class="main-divider"></mat-divider>
+  <form class="wolf-form" [formGroup]="wolfForm" *ngIf="!isLoading">
+    <div class="wolf-form-field-group">
+      <mat-form-field class="very-short-form-field">
+        <mat-label>{{ 'WOLFCONFIG.LOGLEVEL'| translate }}</mat-label>
+        <mat-select [formControl]="loglevel" required>
+          <mat-option value="CRITICAL">CRITICAL</mat-option>
+          <mat-option value="ERROR">ERROR</mat-option>
+          <mat-option value="WARNING">WARNING</mat-option>
+          <mat-option value="INFO">INFO</mat-option>
+          <mat-option value="DEBUG">DEBUG</mat-option>
+        </mat-select>
+        <mat-error *ngIf="loglevel.invalid && (loglevel.dirty || loglevel.touched) && loglevel.errors.required">{{ 'WOLFCONFIG.MISSINGLOGLEVEL' | translate }}</mat-error>
+      </mat-form-field>
+      <mat-form-field class="short-form-field">
+        <mat-label>{{ 'WOLFCONFIG.INTERVAL' | translate }}</mat-label>
+        <input matInput [formControl]="interval" required>
+        <mat-error *ngIf="interval.invalid && (interval.dirty || interval.touched) && interval.errors.required">{{ 'WOLFCONFIG.MISSINGINTERVAL' | translate }}</mat-error>
+        <mat-error *ngIf="interval.invalid && (interval.dirty || interval.touched) && interval.errors.pattern">{{ 'WOLFCONFIG.INVALIDINTERVAL' | translate }}</mat-error>
+      </mat-form-field>
+    </div>
+    <div class="wolf-form-field-group">
+      <mat-form-field class="short-form-field">
+        <mat-label>{{ 'WOLFCONFIG.CLIENTID' | translate }}</mat-label>
+        <input matInput [formControl]="clientid">
+        <mat-error *ngIf="clientid.invalid && (clientid.dirty || clientid.touched) && clientid.errors.pattern">{{ 'WOLFCONFIG.INVALIDCLIENTID' | translate }}</mat-error>
+      </mat-form-field>
+      <mat-form-field class="medium-form-field">
+        <mat-label>{{ 'WOLFCONFIG.DESCRIPTION' | translate }}</mat-label>
+        <input matInput [formControl]="descr">
+      </mat-form-field>
+    </div>
+    <div class="wolf-form-field-group">
+      <mat-form-field class="short-form-field">
+        <mat-label>{{ 'WOLFCONFIG.WEBADDRESS' | translate }}</mat-label>
+        <input matInput [formControl]="webaddr">
+      </mat-form-field>
+      <mat-form-field class="short-form-field">
+        <mat-label>{{ 'WOLFCONFIG.WEBPORT' | translate }}</mat-label>
+        <input matInput [formControl]="webport">
+      </mat-form-field>
+      <mat-form-field class="short-form-field">
+        <mat-label>{{ 'WOLFCONFIG.WEBROOT' | translate }}</mat-label>
+        <input matInput [formControl]="webroot">
+      </mat-form-field>
+    </div>
+  </form>
+  <div class="button-row-right">
+    <button *ngIf="!isLoading" type="submit" mat-raised-button color="primary" (click)="updateConfig()" [disabled]="isSaving || wolfForm.invalid">{{ 'WOLFCONFIG.SAVE' | translate }}</button>
+    <button mat-raised-button (click)="goBack()" tabindex="-1">{{ 'DIALOG.BACK' | translate }}</button>
+  </div>
+</div>

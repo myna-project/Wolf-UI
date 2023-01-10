@@ -1,0 +1,262 @@
+@import "custom-theme";
+@import '~codemirror/lib/codemirror';
+@import '~codemirror/theme/material';
+
+html, body {
+  margin: 0;
+  font-family: 'Roboto', 'Helvetica', sans-serif;
+}
+
+.main-container {
+  margin-top: 1%;
+  margin-right: 2.5%;
+  margin-bottom: 2.5%;
+  margin-left: 2.5%;
+}
+
+.main-container .main-divider {
+  margin-bottom: 20px;
+}
+
+.horizontaly-centered {
+  text-align: center;
+}
+
+.centered-menu {
+  max-width: 400px;
+  margin: 20px auto;
+}
+
+.large-centered-menu {
+  max-width: 1200px;
+  margin: 20px auto;
+}
+
+.mat-dialog-title > .mat-icon {
+  vertical-align: sub;
+}
+
+.mat-chip-list .mat-chip-list-wrapper {
+  display: inline;
+}
+
+.breadcrumb-left {
+  justify-content: flex-start;
+  display: inline;
+}
+
+.breadcrumb-right {
+  display: inline;
+  justify-content: flex-end;
+}
+
+mat-list.wolf-list {
+  padding-top: 10px;
+  margin-bottom: 20px;
+}
+
+mat-list.wolf-list .mat-list-item {
+  height: auto;
+  margin-top: 5px;
+}
+
+.mat-list-item-bold-title {
+  font-weight: bold;
+  margin-left: 8px;
+  margin-right: 8px;
+}
+
+.mat-list-item-content {
+  flex-wrap: wrap;
+  width: 100%;
+  margin-top: 2px;
+}
+
+.mat-list-title {
+  align-self: center;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+.mat-list-item-title-icon {
+  position: relative;
+  margin-bottom: 4px;
+}
+
+.mat-list-item-right {
+  margin-left: auto;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.mat-list-item-right-buttons {
+  margin-left: auto;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.mat-list-item-right-buttons .mat-list-item-right-button {
+  margin: 2px 3px 2px auto;
+}
+
+.mat-list-item-divider {
+  flex-basis: 100%;
+  height: 0;
+  float: right;
+  margin-bottom: 8px;
+}
+
+.wolf-fieldset {
+  border-width: 1px;
+  height: 100%;
+  margin-bottom: 10px;
+  padding: 10px;
+  position: relative;
+}
+
+.wolf-form {
+  margin-top: 20px;
+}
+
+.wolf-form .darkmagenta-button {
+  background-color: #3465a4;
+  color: white;
+}
+
+.wolf-form .wolf-form-field-group .wolf-form-button {
+  margin-bottom: 4px;
+  margin-right: 12px;
+}
+
+.wolf-form .wolf-form-fieldset,
+.wolf-list-fieldset {
+  border-style: dotted;
+  border-color: #999999;
+  border-width: 1px;
+  height: 100%;
+  margin-bottom: 10px;
+  padding: 10px;
+  position: relative;
+}
+
+.wolf-form .wolf-form-field-group {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 4px;
+  position: relative;
+  width: 100%;
+}
+
+.wolf-form .wolf-form-field-group .very-short-form-field {
+  margin-right: 12px;
+}
+
+.wolf-form .wolf-form-field-group .short-form-field {
+  min-width: 25%;
+  margin-right: 12px;
+}
+
+.wolf-form .wolf-form-field-group .medium-form-field {
+  min-width: 40%;
+  margin-right: 12px;
+}
+
+.wolf-form .adddrains-button,
+.plugins-section-button {
+  background-color: #204a87;
+  color: white;
+}
+
+.wolf-tree {
+  width: 100%;
+}
+
+.mat-tree {
+  padding-top: 8px;
+}
+
+.mat-tree-node-content {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  margin-top: 2px;
+  margin-bottom: 2px;
+}
+
+.mat-tree-node-title {
+  align-self: center;
+}
+
+.mat-tree-node-bold-title {
+  font-weight: bold;
+}
+
+.mat-tree-node-underlined-title {
+  text-decoration: underline;
+}
+
+.mat-tree-node-italic-title {
+  font-style: italic;
+}
+
+.mat-tree-node-title-icon {
+  position: relative;
+  top: 5px;
+  right: 6px;
+}
+
+.mat-tree-node-right {
+  margin-left: auto;
+}
+
+.mat-tree-node-buttons {
+  display: flex;
+  margin-left: auto;
+}
+
+.button-row-right button,
+.button-row-right a {
+  margin-right: 1%;
+  display: inline;
+  float: right;
+}
+
+.drain-selected {
+  background-color: #8ae234;
+}
+
+.confirm {
+  background-color: #8ae234;
+}
+
+.clickable {
+  cursor: pointer;
+}
+
+.clickable-drain {
+  transform: scale(1);
+  transition: 0.3s;
+}
+
+.clickable-drain:hover {
+  transform: scale(1.02);
+}
+
+.notify-success {
+  color: #155724;
+  background-color: #8ae234;
+  border-color: #155724;
+}
+
+.error {
+  color: red;
+}
+
+.button-list {
+  top: 0%;
+}
+
+.button-list:hover {
+  top: -5%;
+}

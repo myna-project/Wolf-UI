@@ -1,0 +1,35 @@
+<mat-progress-bar *ngIf="isLoading || isSaving" mode="indeterminate"></mat-progress-bar>
+<div class="main-container">
+  <h2>{{ "REGMAPS.TITLELOAD" | translate }}</h2>
+  <mat-divider class="main-divider"></mat-divider>
+  <div *ngIf="csvMapName" class="button-row-right breadcrumb-right">
+    <button mat-flat-button color="warn" [disabled]="isDeleting" (click)="delete()">{{ 'REGMAPS.DELETE' | translate }}</button>
+  </div>
+  <form class="wolf-form" [formGroup]="mapForm" *ngIf="!isLoading">
+    <div class="wolf-form-field-group">
+      <mat-form-field class="short-form-field">
+        <mat-label>{{'REGMAPS.NAME' | translate}}</mat-label>
+        <input matInput [formControl]="name" required>
+        <mat-error *ngIf="name.invalid && (name.dirty || name.touched) && name.errors.required">{{ 'REGMAPS.MISSINGNAME' | translate }}</mat-error>
+        <mat-error *ngIf="name.invalid && (name.dirty || name.touched) && name.errors.pattern">{{ 'REGMAPS.INVALIDNAME' | translate }}</mat-error>
+      </mat-form-field>
+    </div>
+    <div *ngIf="!csvMapName" class="wolf-form-field-group">
+      <mat-form-field class="short-form-field">
+        <mat-label>{{ 'REGMAPS.PLUGIN' | translate }}</mat-label>
+        <mat-select [formControl]="plugin">
+          <mat-option *ngFor="let p of fieldPlugins" [value]="p">{{p}}</mat-option>
+        </mat-select>
+        <mat-error *ngIf="plugin.invalid && (plugin.dirty || plugin.touched) && plugin.errors.required">{{ 'REGMAPS.MISSINGPLUGIN' | translate }}</mat-error>
+      </mat-form-field>
+    </div>
+    <div class="content-area">
+      <ngx-codemirror [formControl]="content" [options]="{lineNumbers: true, theme: 'material'}"></ngx-codemirror>
+      <mat-error *ngIf="content.invalid && (content.dirty || content.touched) && content.errors.required">{{ 'REGMAPS.MISSINGCONTENT' | translate }}</mat-error>
+    </div>
+  </form>
+  <div class="button-row-right">
+    <button *ngIf="!isLoading" type="submit" mat-raised-button color="primary" (click)="save()" [disabled]="isSaving || mapForm.invalid">{{ 'REGMAPS.SAVE' | translate }}</button>
+    <button mat-raised-button (click)="goBack()" tabindex="-1">{{ 'DIALOG.BACK' | translate }}</button>
+  </div>
+</div>

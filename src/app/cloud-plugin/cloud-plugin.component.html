@@ -1,0 +1,25 @@
+<mat-progress-bar *ngIf="isLoading" mode="indeterminate"></mat-progress-bar>
+<div class="main-container horizontaly-centered">
+  <h2>{{ 'PLUGINS.TITLECLOUD' | translate }}</h2>
+  <mat-divider class="main-divider"></mat-divider>
+  <div class="centered-menu">
+    <mat-accordion multi>
+      <mat-expansion-panel *ngFor="let plugin of cloudPlugins" [expanded]="true">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            {{plugin}}
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <span class="button-row-right" *ngIf="cloudDict[plugin]">
+          <button mat-raised-button color="primary" (click)="showDetail(plugin, plugin)">{{ 'PLUGINS.MODIFY' | translate }}</button>
+        </span>
+        <span class="button-row-right" *ngIf="!cloudDict[plugin]">
+          <button mat-raised-button (click)="showDetail(plugin, null)" class="plugins-section-button">{{ 'PLUGINS.ADDSECTION' | translate }}</button>
+        </span>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </div>
+  <div class="button-row-right">
+    <button mat-raised-button (click)="goBack()" tabindex="-1">{{ 'DIALOG.BACK' | translate }}</button>
+  </div>
+</div>

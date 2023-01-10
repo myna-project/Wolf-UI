@@ -1,0 +1,24 @@
+<mat-progress-bar *ngIf="isLoading" mode="indeterminate"></mat-progress-bar>
+<div class="main-container horizontaly-centered">
+  <h2>{{ 'REGMAPS.TITLE' | translate}}</h2>
+  <mat-divider class="main-divider"></mat-divider>
+  <div class="maps-menu">
+    <mat-accordion multi>
+      <mat-expansion-panel *ngFor="let map of mapsList" [expanded]="true">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            {{map}}
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <span class="button-row-right">
+          <button mat-raised-button color="primary" (click)="modify(map)">{{ 'REGMAPS.MODIFY' | translate }}</button>
+          <button mat-raised-button (click)="download(map)">{{ 'REGMAPS.DOWNLOAD' | translate }}</button>
+        </span>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </div>
+  <button mat-raised-button color="primary" [disabled]="isLoading" routerLink="/regmaps">{{ 'REGMAPS.UPLOADCSVMAP' | translate }}</button>
+  <div class="button-row-right">
+    <button mat-raised-button (click)="goBack()" tabindex="-1">{{ 'DIALOG.BACK' | translate }}</button>
+  </div>
+</div>

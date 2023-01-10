@@ -1,0 +1,143 @@
+<mat-progress-bar *ngIf="isLoading" mode="indeterminate"></mat-progress-bar>
+<div class="main-container" *ngIf="isInfluxDB">
+  <h2>{{'MEASURES.TITLE' | translate}}</h2>
+  <form class="wolf-form" [formGroup]="measuresForm">
+    <div class="wolf-form-field-group">
+      <mat-form-field class="short-form-field">
+        <input matInput [ngxMatDatetimePicker]="startpicker" placeholder="{{ 'MEASURES.STARTTIME' | translate }}" [formControlName]="'startTime'" required>
+        <mat-datepicker-toggle matSuffix [for]="startpicker"></mat-datepicker-toggle>
+        <ngx-mat-datetime-picker #startpicker [defaultTime]="[0,0,0]" [showSeconds]="false" [touchUi]="true"></ngx-mat-datetime-picker>
+        <mat-error *ngIf="group['startTime'].invalid && (group['startTime'].dirty || group['startTime'].touched) && group['startTime'].errors.required">{{ 'MEASURES.MISSINGSTARTDATE' | translate }}</mat-error>
+      </mat-form-field>
+      <mat-form-field class="short-form-field">
+        <input matInput [ngxMatDatetimePicker]="endpicker" placeholder="{{ 'MEASURES.ENDTIME' | translate }}" [formControlName]="'endTime'" required>
+        <mat-datepicker-toggle matSuffix [for]="endpicker"></mat-datepicker-toggle>
+        <ngx-mat-datetime-picker #endpicker [defaultTime]="[0,0,0]" [showSeconds]="false" [touchUi]="true"></ngx-mat-datetime-picker>
+        <mat-error *ngIf="group['endTime'].invalid && (group['endTime'].dirty || group['endTime'].touched) && group['endTime'].errors.required">{{ 'MEASURES.MISSINGENDDATE' | translate }}</mat-error>
+      </mat-form-field>
+      <button mat-raised-button class="wolf-form-button darkmagenta-button" (click)="setLastHour()">{{ 'MEASURES.LASTHOUR' | translate }}</button>
+      <button mat-raised-button class="wolf-form-button darkmagenta-button" (click)="setLastDay()">{{ 'MEASURES.LASTDAY' | translate }}</button>
+      <button mat-raised-button class="wolf-form-button darkmagenta-button" (click)="setLastWeek()">{{ 'MEASURES.LASTWEEK' | translate }}</button>
+      <button mat-raised-button class="wolf-form-button darkmagenta-button" (click)="setLastMonth()">{{ 'MEASURES.LASTMONTH' | translate }}</button>
+    </div>
+    <div class="wolf-form-field-group">
+      <mat-form-field class="short-form-field">
+        <mat-label>{{ 'MEASURES.TIMEAGGREGATION' | translate }}</mat-label>
+        <mat-select [formControlName]="'timeAggregation'" required>
+          <mat-option *ngFor="let aggregation of timeAggregations" [value]="aggregation.id">{{aggregation.description}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div>
+      <h3>
+        {{ 'MEASURES.DRAINS' | translate }}
+        <button *ngIf="!isLoading" mat-raised-button class="wolf-form-button adddrains-button" (click)="addDrains()">{{ 'MEASURES.ADDDRAINS' | translate }}</button>
+      </h3>
+    </div>
+    <mat-list class="mat-list wolf-list">
+      <mat-list-item class="mat-list-item" *ngFor="let d of selectedDrains; let i = index">
+        <div *ngIf="d.visible" class="mat-list-item-content wolf-form-field-group">
+          <span class="measures-drain-title">
+            <button mat-icon-button (click)="removeDrain(i)">
+              <mat-icon class="mat-list-item-title-icon error" title="{{ 'MEASURES.REMOVEDRAIN' | translate }}">remove_circle</mat-icon>
+            </button>
+            {{d.full_name}}
+          </span>
+          <span class="mat-list-item-right">
+            <mat-form-field class="short-form-field">
+              <mat-label>{{ 'MEASURES.AGGREGATION' | translate }}</mat-label>
+              <mat-select [formControlName]="'aggregation_' + i" required>
+                <mat-option *ngFor="let aggregation of typeAggregations" [value]="aggregation">{{aggregation}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field class="short-form-field">
+              <mat-label>{{ 'MEASURES.FILLING' | translate }}</mat-label>
+              <mat-select [formControlName]="'fill_' + i" required>
+                <mat-option *ngFor="let fill of measuresFilling" [value]="fill.id">{{fill.description}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </span>
+          <span class="mat-list-item-divider">
+            <mat-divider></mat-divider>
+          </span>
+        </div>
+      </mat-list-item>
+    </mat-list>
+    <div class="togo-form-field-group">
+      <button type="submit" mat-raised-button class="load-button" color="primary" (click)="loadMeasures()" [disabled]="measuresForm.invalid || (selectedDrains.length == 0)">{{ 'MEASURES.LOADMEASURES' | translate }}</button>
+      <mat-spinner class="measures-loading-spinner" *ngIf="isLoadingMeasures" diameter="30"></mat-spinner>
+    </div>
+    <div class="no-data-div" *ngIf="measuresLoaded && (chartSeries.length === 0)">
+      <span>{{ 'MEASURES.NOMEASURES' | translate }}</span>
+    </div>
+    <div *ngIf="chart">
+      <h5>{{ 'MEASURES.CHART' | translate }}</h5>
+      <div class="wolf-form-field-group">
+        <mat-form-field class="short-form-field">
+          <mat-label>{{ 'MEASURES.CHARTTYPE' | translate }}</mat-label>
+          <mat-select [formControlName]="'chartType'" required>
+            <mat-option *ngFor="let type of chartTypes" [value]="type.id">{{type.description}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field *ngIf="splineChart" class="short-form-field show-markers-label" floatLabel="always" appearance="none">
+          <mat-label>{{ 'MEASURES.SHOWMARKERS' | translate }}</mat-label>
+          <mat-slide-toggle color="primary" [formControlName]="'showMarkers'"></mat-slide-toggle>
+          <textarea matInput hidden></textarea>
+        </mat-form-field>
+      </div>
+      <div [chart]="chart"></div>
+      <div *ngIf="chartOptions" class="wolf-form-field-group">
+        <mat-form-field class="short-form-field">
+          <mat-label>{{ 'MEASURES.CHARTAGGREGATION' | translate }}</mat-label>
+          <mat-select [formControlName]="'chartAggregation'" required>
+            <mat-option *ngFor="let aggregation of chartAggregations" [value]="aggregation.id">{{aggregation.description}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div>
+        <button *ngIf="!chartOptions" mat-raised-button color="primary" (click)="chartOptions = true">{{ 'MEASURES.SHOWCHARTOPTIONS' | translate }}</button>
+        <button mat-raised-button color="primary" class="csv-button" (click)="exportCsv()">{{ 'MEASURES.DOWNLOADCSV' | translate }}</button>
+      </div>
+    </div>
+  </form>
+</div>
+<div class="main-container" *ngIf="!isInfluxDB">
+  <h2>{{'MEASURES.TITLELAST' | translate}}</h2>
+  <mat-divider></mat-divider>
+  <div class="wolf-form">
+    <button type="submit" mat-raised-button class="adddrains-button" (click)="selectClientLastMeasures()" [disabled]="isLoading || isLoadingMeasures">{{ 'MEASURES.LOADLASTMEASURES' | translate }}</button>
+    <mat-spinner class="measures-loading-spinner" *ngIf="isLoadingMeasures" diameter="30"></mat-spinner>
+  </div>
+  <div class="large-centered-menu" *ngIf="!isLoadingMeasures">
+    <mat-accordion multi>
+      <mat-expansion-panel *ngFor="let deviceDrain of deviceDrains" [expanded]="true">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            {{deviceDrain.device.full_name}}
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <mat-list *ngIf="deviceDrain.drains" class="mat-list wolf-list">
+          <mat-list-item *ngFor="let drain of deviceDrain.drains" class="mat-list-item">
+            <div class="mat-list-item-content">
+              <span class="mat-list-item-title">{{drain.measure_descr}}</span>
+              <div *ngIf="drain.last_measure && ((drain.measure_type !== 'c') && (drain.read_write === false))" class="mat-list-item-right">
+                <span>{{'ACTIVATION.LASTMEASURE' | translate}} <b>{{drain.last_measure.value + (drain.measure_unit ? ' ' + drain.measure_unit : '')}}</b></span>
+              </div>
+            </div>
+            <div class="mat-list-item-content">
+              <div *ngIf="drain.last_measure && ((drain.measure_type !== 'c') && (drain.read_write === false))" class="mat-list-item-right">
+                <span>{{'ACTIVATION.LASTUPDATE' | translate}} <b>{{drain.last_measure.time}}</b></span>
+              </div>
+            </div>
+            <span class="mat-list-item-divider">
+              <mat-divider></mat-divider>
+            </span>
+          </mat-list-item>
+        </mat-list>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </div>
+  <div class="no-data-div" *ngIf="measuresLoaded && (lastMeasures.length === 0)">
+    <span>{{ 'MEASURES.NOMEASURES' | translate }}</span>
+  </div>
+</div>

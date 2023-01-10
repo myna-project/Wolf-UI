@@ -1,0 +1,21 @@
+<h1 mat-dialog-title>{{ 'DRAINSTREE.CHOOSEDRAIN' | translate }}</h1>
+<div mat-dialog-content>
+  <mat-tree [dataSource]="dataSource" [treeControl]="treeControl" class="wolf-tree">
+    <mat-tree-node *matTreeNodeDef="let node" matTreeNodePadding>
+      <span class="mat-tree-node-content" matTreeNodeToggle [class.clickable]="(hasChild(node.id, node) || (node.type === 'drain')) || (node.type === 'device' && node.is_last)" [class.clickable-drain]="node.type === 'drain' || (node.type === 'device' && node.is_last)" [class.drain-selected]="((node.type === 'drain') && checkSelectedDrain(node)) || (node.type === 'device' && node.is_last && checkSelectedDrain(node))" (click)="selectDrain(node)">
+        <button mat-icon-button matTreeNodeToggle [attr.aria-label]="'toggle ' + node.id" >
+          <mat-icon class="mat-icon-rtl-mirror" *ngIf="hasChild(node.id, node)">
+            {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
+          </mat-icon>
+        </button>
+        <span class="mat-tree-node-title" [class.mat-tree-node-bold-title]="node.type === 'device'">{{node.item}}</span>
+        <span class="mat-list-item-divider">
+          <mat-divider></mat-divider>
+        </span>
+      </span>
+    </mat-tree-node>
+  </mat-tree>
+</div>
+<div mat-dialog-actions>
+  <button mat-raised-button [mat-dialog-close]="singleDrain ? selectedDrain : selectedDrains">{{ 'DRAINSTREE.CLOSE' | translate }}</button>
+</div>

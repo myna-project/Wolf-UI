@@ -1,0 +1,85 @@
+<mat-progress-bar *ngIf="isLoading || isSaving" mode="indeterminate"></mat-progress-bar>
+<div class="main-container horizontally-centered" *ngIf="!isLoading">
+  <h2>{{ 'NETCONFIG.TITLE' | translate }}</h2>
+  <mat-divider></mat-divider>
+  <form class="wolf-form" [formGroup]="netForm">
+    <div class="wolf-form-field-group">
+      <mat-form-field class="very-short-form-field">
+        <mat-label>{{ 'NETCONFIG.INTERFACE' | translate }}</mat-label>
+        <mat-select [formControl]="interface" [compareWith]="compareInterfaces">
+          <mat-option *ngFor="let i of interfaces" [value]="i">{{i.interface}}</mat-option>
+        </mat-select>
+        <mat-error *ngIf="interface.invalid && (interface.dirty || interface.touched) && interface.errors.required">{{ 'NETCONFIG.MANDATORYFIELD' | translate }}</mat-error>
+      </mat-form-field>
+      <mat-spinner *ngIf="isLoadingConnection" diameter="30"></mat-spinner>
+    </div>
+    <div *ngIf="iface && !isLoadingConnection">
+      <h5 *ngIf="connection.connection && connection.connection.id">{{connection.connection.id + (connection.connection.uuid ? ' (' + connection.connection.uuid + ')' : '') }}</h5>
+      <h6 *ngIf="connection.connection && connection.connection.type">{{ ('NETCONFIG.TYPE' | translate) + ': ' + connection.connection.type }}</h6>
+      <div *ngIf="connection.connection && (connection.connection.type === '802-11-wireless')" class="wolf-form-field-group">
+        <mat-form-field class="short-form-field">
+          <mat-label>{{ 'NETCONFIG.SSID' | translate }}</mat-label>
+          <mat-select [formControl]="ssid" [compareWith]="compareAccessPoints">
+            <mat-option *ngFor="let ap of accessPoints" [value]="ap.ssid">{{ap.ssid + (ap.bssid ? ' (' + ap.bssid + ')' : '') + ': ' + ap.frequency + ' MHz - ' + ap.signal + '%'}}</mat-option>
+          </mat-select>
+          <mat-error *ngIf="ssid.invalid && (ssid.dirty || ssid.touched) && ssid.errors.required">{{ 'NETCONFIG.MANDATORYFIELD' | translate }}</mat-error>
+        </mat-form-field>
+        <mat-form-field class="short-form-field">
+          <mat-label>{{ 'NETCONFIG.PSK' | translate }}</mat-label>
+          <input matInput type="password" [formControl]="psk">
+          <mat-error *ngIf="psk.invalid && (psk.dirty || psk.touched) && psk.errors.required">{{ 'NETCONFIG.MANDATORYFIELD' | translate }}</mat-error>
+        </mat-form-field>
+      </div>
+      <fieldset class="wolf-form-fieldset" *ngFor="let v of ipVersions">
+        <legend>{{ 'NETCONFIG.IPV' + v + 'CONFIG' | translate }}</legend>
+        <div class="wolf-form-field-group">
+          <mat-form-field class="very-short-form-field">
+            <mat-label>{{ 'NETCONFIG.METHOD' | translate }}</mat-label>
+            <mat-select [formControlName]="'ipv' + v + '_method'">
+              <mat-option value="auto">auto</mat-option>
+              <mat-option value="disabled">disabled</mat-option>
+              <mat-option value="ignore">ignore</mat-option>
+              <mat-option value="manual">manual</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div *ngIf="netForm.get('ipv' + v + '_method').value === 'manual'" class="wolf-form-field-group">
+          <mat-form-field class="short-form-field">
+            <mat-label>{{ 'NETCONFIG.ADDRESS' | translate }}</mat-label>
+            <input matInput [formControlName]="'ipv' + v + '_address'">
+            <mat-error *ngIf="netForm.get('ipv' + v + '_address').invalid && (netForm.get('ipv' + v + '_address').dirty || netForm.get('ipv' + v + '_address').touched) && netForm.get('ipv' + v + '_address').errors.required">{{ 'NETCONFIG.MANDATORYFIELD' | translate }}</mat-error>
+            <mat-error *ngIf="netForm.get('ipv' + v + '_address').invalid && (netForm.get('ipv' + v + '_address').dirty || netForm.get('ipv' + v + '_address').touched) && netForm.get('ipv' + v + '_address').errors.pattern">{{ 'NETCONFIG.INVALIDADDRESS' | translate }}</mat-error>
+          </mat-form-field>
+          <mat-form-field class="short-form-field">
+            <mat-label>{{ 'NETCONFIG.PREFIX' | translate }}</mat-label>
+            <input matInput [formControlName]="'ipv' + v + '_prefix'">
+            <mat-error *ngIf="netForm.get('ipv' + v + '_prefix').invalid && (netForm.get('ipv' + v + '_prefix').dirty || netForm.get('ipv' + v + '_prefix').touched) && netForm.get('ipv' + v + '_prefix').errors.required">{{ 'NETCONFIG.MANDATORYFIELD' | translate }}</mat-error>
+            <mat-error *ngIf="netForm.get('ipv' + v + '_prefix').invalid && (netForm.get('ipv' + v + '_prefix').dirty || netForm.get('ipv' + v + '_prefix').touched) && netForm.get('ipv' + v + '_prefix').errors.pattern">{{ 'NETCONFIG.INVALIDPREFIX' | translate }}</mat-error>
+          </mat-form-field>
+          <mat-form-field class="short-form-field">
+            <mat-label>{{ 'NETCONFIG.GATEWAY' | translate }}</mat-label>
+            <input matInput [formControlName]="'ipv' + v + '_gateway'">
+            <mat-error *ngIf="netForm.get('ipv' + v + '_gateway').invalid && (netForm.get('ipv' + v + '_gateway').dirty || netForm.get('ipv' + v + '_gateway').touched) && netForm.get('ipv' + v + '_gateway').errors.required">{{ 'NETCONFIG.MANDATORYFIELD' | translate }}</mat-error>
+            <mat-error *ngIf="netForm.get('ipv' + v + '_gateway').invalid && (netForm.get('ipv' + v + '_gateway').dirty || netForm.get('ipv' + v + '_gateway').touched) && netForm.get('ipv' + v + '_gateway').errors.pattern">{{ 'NETCONFIG.INVALIDADDRESS' | translate }}</mat-error>
+          </mat-form-field>
+        </div>
+        <div *ngIf="netForm.get('ipv' + v + '_method').value === 'manual'" class="wolf-form-field-group">
+          <mat-form-field class="short-form-field" *ngFor="let d of connection['ipv' + v]['dns']; let i = index">
+            <mat-label>{{ 'NETCONFIG.DNS' | translate }} {{i + 1}}</mat-label>
+            <input matInput [formControlName]="'ipv' + v + '_dns_' + i">
+            <mat-error *ngIf="netForm.get('ipv' + v + '_dns_' + i).invalid && (netForm.get('ipv' + v + '_dns_' + i).dirty || netForm.get('ipv' + v + '_dns_' + i).touched) && netForm.get('ipv' + v + '_dns_' + i).errors.required">{{ 'NETCONFIG.MANDATORYFIELD' | translate }}</mat-error>
+            <mat-error *ngIf="netForm.get('ipv' + v + '_dns_' + i).invalid && (netForm.get('ipv' + v + '_dns_' + i).dirty || netForm.get('ipv' + v + '_dns_' + i).touched) && netForm.get('ipv' + v + '_dns_' + i).errors.pattern">{{ 'NETCONFIG.INVALIDADDRESS' | translate }}</mat-error>
+          </mat-form-field>
+          <button *ngIf="connection['ipv' + v]['dns'].length > 1" mat-icon-button (click)="removeDNS(v)">
+            <mat-icon class="error" title="{{ 'NETCONFIG.REMOVEDNS' | translate }}">remove_circle</mat-icon>
+          </button>
+        </div>
+        <button *ngIf="netForm.get('ipv' + v + '_method').value === 'manual'" mat-raised-button color="accent" (click)="addDNS(v)">{{ 'NETCONFIG.ADDDNS' | translate }}</button>
+      </fieldset>
+    </div>
+  </form>
+  <div class="button-row-right">
+    <button mat-raised-button color="primary" (click)="save()" *ngIf="interface" [disabled]="netForm.invalid || isSaving">{{ 'NETCONFIG.SAVE' | translate }}</button>
+    <button mat-raised-button (click)="goBack()" tabindex="-1">{{ 'DIALOG.BACK' | translate }}</button>
+  </div>
+</div>

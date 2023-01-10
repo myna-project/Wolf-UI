@@ -1,0 +1,37 @@
+<div class="main-container horizontaly-centered">
+  <h1>{{ 'DASHBOARD.TITLE' | translate }}</h1>
+  <mat-divider class="main-divider"></mat-divider>
+  <p>{{ 'DASHBOARD.SUBTITLE' | translate }}</p>
+  <mat-list class="mat-list wolf-list centered-menu">
+    <mat-list-item class="mat-list-item">
+      <div class="mat-list-item-content">
+        <span class="mat-list-item-title">
+          <button mat-mini-fab color="primary" class="button-list" (click)="goToMeasures()">
+            <mat-icon class="mat-list-item-title-icon">timeline</mat-icon>
+          </button>
+          <span class="mat-list-item-bold-title">{{ 'DASHBOARD.MEASURE' | translate }}</span>
+        </span>
+      </div>
+    </mat-list-item>
+    <mat-list-item class="mat-list-item">
+      <div class="mat-list-item-content">
+        <span class="mat-list-item-title">
+          <button mat-mini-fab color="primary" class="button-list" (click)="goToActivation()">
+            <mat-icon class="mat-list-item-title-icon">radio_button_checked</mat-icon>
+          </button>
+          <span class="mat-list-item-bold-title">{{ 'DASHBOARD.ACTIVATION' | translate }}</span>
+        </span>
+      </div>
+    </mat-list-item>
+    <mat-list-item class="mat-list-item">
+      <div class="mat-list-item-content">
+        <span class="mat-list-item-title">
+          <button mat-mini-fab color="primary" class="button-list" (click)="goToConfigMenu()">
+            <mat-icon class="mat-list-item-title-icon">settings</mat-icon>
+          </button>
+          <span class="mat-list-item-bold-title">{{ 'DASHBOARD.CONFIGURATION' | translate }}</span>
+        </span>
+      </div>
+    </mat-list-item>
+  </mat-list>
+</div>

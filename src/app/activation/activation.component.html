@@ -1,0 +1,42 @@
+<mat-progress-bar *ngIf="(isLoadingDevices && isLoadingDrains) || isSaving" mode="indeterminate"></mat-progress-bar>
+<div class="main-container horizontaly-centered">
+  <h2>{{ 'ACTIVATION.TITLE' | translate }}</h2>
+  <mat-divider class="main-divider"></mat-divider>
+  <div class="large-centered-menu" *ngIf="!(isLoadingDevices && isLoadingDrains)">
+    <mat-accordion multi>
+      <form *ngIf="formGroup" [formGroup]="formGroup">
+        <mat-expansion-panel *ngFor="let deviceDrain of deviceDrains">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              {{deviceDrain.device.device_descr}} - {{deviceDrain.device.device_id}}
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <mat-list *ngIf="deviceDrain.drains" class="mat-list wolf-list">
+            <mat-list-item *ngFor="let drain of deviceDrain.drains" class="mat-list-item">
+              <div class="mat-list-item-content">
+                <span class="mat-list-item-title">{{drain.measure_descr}}</span>
+                <div *ngIf="drain.last_measure && ((drain.measure_type !== 'c') && (drain.read_write === false))" class="mat-list-item-right">
+                  <span>{{'ACTIVATION.LASTMEASURE' | translate}} <b>{{drain.last_measure.value + (drain.measure_unit ? ' ' + drain.measure_unit : '')}}</b></span>
+                </div>
+                <div *ngIf="(drain.measure_type === 'c') && (drain.read_write === true) && drain.last_measure" class="mat-list-item-right">
+                  <mat-slide-toggle color="primary" [formControlName]="deviceDrain.device.device_id + '_' + drain.measure_id"></mat-slide-toggle>
+                </div>
+              </div>
+              <div class="mat-list-item-content">
+                <div *ngIf="drain.last_measure && ((drain.measure_type !== 'c') && (drain.read_write === false))" class="mat-list-item-right">
+                  <span>{{'ACTIVATION.LASTUPDATE' | translate}} <b>{{drain.last_measure.time}}</b></span>
+                </div>
+              </div>
+              <span class="mat-list-item-divider">
+                <mat-divider></mat-divider>
+              </span>
+            </mat-list-item>
+          </mat-list>
+        </mat-expansion-panel>
+      </form>
+    </mat-accordion>
+  </div>
+  <div class="button-row-right">
+    <button mat-raised-button (click)="goBack()" tabindex="-1">{{ 'DIALOG.BACK' | translate }}</button>
+  </div>
+</div>

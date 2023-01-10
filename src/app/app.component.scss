@@ -1,0 +1,85 @@
+.wolf-container {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.wolf-toolbar {
+  position: fixed;
+  z-index: 2;
+  min-height: 80px;
+}
+
+h1.wolf-name {
+  margin-left: 8px;
+  margin-right: 4px;
+}
+
+h1.small-screen-text {
+  font-size: 20px;
+}
+
+h1.is-mobile {
+  display: none;
+}
+
+h1.is-large-screen {
+  display: none;
+}
+
+.sidenav-container {
+  flex: 1 0 auto;
+  margin-top: 80px;
+}
+
+.sidenav {
+  position: fixed;
+  margin-top: 80px;
+}
+
+.sidenav-icon {
+  margin-right: 6px;
+}
+
+.toolbar-fill-remaining-space {
+  flex: 1 1 auto;
+}
+
+.avatar-button {
+  background-color: grey;
+}
+
+.mat-menu-item.user-menu-item {
+  padding-left: 33px;
+  text-align: left;
+}
+
+.selected-lang-flag {
+  padding-left: 10px;
+}
+
+.scroll-to-top {
+  position: fixed;
+  bottom: 2%;
+  right: 0.3%;
+  border-radius: 2px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.5);
+  cursor: hand;
+  border-radius: 50%;
+}
+
+mat-expansion-panel {
+  margin-left: -7px;
+}
+
+.extension-title {
+  margin-left: -18px;
+}
+
+.wolf-mat-list a {
+  width: 100%;
+}

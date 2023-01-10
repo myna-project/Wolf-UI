@@ -1,0 +1,33 @@
+<mat-progress-bar *ngIf="isLoading || isSaving" mode="indeterminate"></mat-progress-bar>
+<div class="main-container">
+  <h2>{{ ('SECTION.TITLE' | translate) + (sectionName ? ' ' + sectionName : (pluginName ? ' ' + pluginName : '')) }}</h2>
+  <mat-divider class="main-divider"></mat-divider>
+  <div *ngIf="sectionName" class="button-row-right breadcrumb-right">
+    <button mat-flat-button color="warn" [disabled]="isDeleting" (click)="delete()">{{ 'SECTION.DELETE' | translate }}</button>
+  </div>
+  <div *ngIf="!isLoading && (pluginType === 'field') && sectionName">
+    <button mat-raised-button color="accent" (click)="editMap()">{{ section ? ('SECTION.MODIFYMAP' | translate) : ('SECTION.UPLOADCSVMAP' | translate) }}</button>
+  </div>
+  <form class="wolf-form" [formGroup]="sectionForm" *ngIf="!isLoading">
+    <div class="wolf-form-field-group">
+      <mat-form-field [class.short-form-field]="config.name !== 'description'" [class.medium-form-field]="config.name === 'description'" [floatLabel]="(config.type === 'boolean') ? 'always' : ''" [appearance]="(config.type === 'boolean') ? 'none' : ''" *ngFor="let config of plugin">
+        <mat-label>{{config.name}}</mat-label>
+        <input matInput [type]="(config.name === 'password') ? 'password' : 'text'" *ngIf="!config.enum && config.type !== 'boolean' && config.name !== 'disabled' && config.name !== 'csvmap'" [formControlName]="config.name">
+        <mat-select *ngIf="config.enum && config.name !== 'disabled' && config.name !== 'csvmap'" [formControlName]="config.name">
+          <mat-option *ngFor="let enum of config.enum" [value]="enum">{{enum}}</mat-option>
+        </mat-select>
+        <mat-select *ngIf="config.name === 'csvmap'" [formControlName]="config.name">
+          <mat-option *ngFor="let map of maps" [value]="map.path">{{map.name}}</mat-option>
+        </mat-select>
+        <mat-slide-toggle *ngIf="config.type === 'boolean'" class="toggle" [formControlName]="config.name"></mat-slide-toggle>
+        <textarea matInput *ngIf="config.type === 'boolean'" hidden></textarea>
+        <mat-error *ngIf="sectionForm.get(config.name).invalid && (sectionForm.get(config.name).dirty || sectionForm.get(config.name).touched) && sectionForm.get(config.name).errors.required">{{ 'SECTION.MANDATORYFIELD' | translate }}</mat-error>
+        <mat-error *ngIf="sectionForm.get(config.name).invalid && (sectionForm.get(config.name).dirty || sectionForm.get(config.name).touched) && sectionForm.get(config.name).errors.pattern">{{ 'SECTION.INVALIDINTEGER' | translate }}</mat-error>
+      </mat-form-field>
+    </div>
+  </form>
+  <div class="button-row-right">
+    <button *ngIf="!isLoading" type="submit" mat-raised-button color="primary" (click)="save()" [disabled]="isSaving || sectionForm.invalid">{{ 'SECTION.SAVE' | translate }}</button>
+    <button mat-raised-button (click)="goBack()" tabindex="-1">{{ 'DIALOG.BACK' | translate }}</button>
+  </div>
+</div>

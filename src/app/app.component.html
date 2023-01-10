@@ -1,0 +1,70 @@
+<div class="wolf-container" [ngClass]="style" [class.is-mobile]="mobileQuery.matches">
+  <mat-toolbar color="primary" class="wolf-toolbar">
+    <button mat-icon-button (click)="snav.toggle()" *ngIf="currentUser && currentUser.isLogged"><mat-icon>menu</mat-icon></button>
+    <h1 class="wolf-name" [class.is-mobile]="mobileQuery.matches">WolfUI</h1>
+    <h1 class="wolf-name small-screen-text" [class.is-large-screen]="!mobileQuery.matches">WolfUI</h1>
+    <span class="toolbar-fill-remaining-space"></span>
+    <button mat-icon-button (click)="searchOpened=!searchOpened" *ngIf="currentUser && currentUser.isLogged"><mat-icon>search</mat-icon></button>
+    <button mat-icon-button [class.avatar-button]="currentUser" [matMenuTriggerFor]="user" *ngIf="currentUser && currentUser.isLogged" dir="rtl">
+      <span>{{ currentUser.username.charAt(0).toUpperCase() }}</span>
+    </button>
+  </mat-toolbar>
+  <mat-menu #user="matMenu">
+    <mat-divider></mat-divider>
+    <button mat-menu-item class="user-menu-item" [matMenuTriggerFor]="lang"><img class="selected-lang-flag" src="assets/img/{{selectedLang}}-flag-icon-16.png"/>:{{ 'LOGIN.LANG' | translate }}</button>
+    <button mat-menu-item class="user-menu-item" (click)="logout()">Logout</button>
+  </mat-menu>
+  <mat-menu #lang="matMenu">
+    <button mat-menu-item *ngFor="let lang of translate.getLangs()" (click)="changeLanguage(lang)"><img class="available-lang-flag" src="assets/img/{{lang}}-flag-icon-16.png"/>{{langName[lang]}}</button>
+  </mat-menu>
+  <mat-sidenav-container class="sidenav-container">
+    <mat-sidenav #snav class="sidenav" [mode]="mobileQuery.matches ? 'over' : 'push'" [fixedInViewport]="mobileQuery.matches">
+      <mat-nav-list>
+        <a mat-list-item routerLink="dashboard" routerLinkActive="active" (click)="closeSideNav()">
+          <mat-icon class="sidenav-icon">home</mat-icon> <span class="nav-caption">Home</span>
+        </a>
+        <a mat-list-item routerLink="measures" routerLinkActive="active" (click)="closeSideNav()">
+          <mat-icon class="sidenav-icon">timeline</mat-icon><span class="nav-caption">{{ 'MENU.MEASURES' | translate }}</span>
+        </a>
+        <a mat-list-item routerLink="activation" routerLinkActive="active" (click)="closeSideNav()">
+          <mat-icon class="sidenav-icon">radio_button_checked</mat-icon><span class="nav-caption">{{ 'MENU.ACTIVATION' | translate }}</span>
+        </a>
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title class="extension-title">
+              <a mat-list-item routerLink="configmenu" (click)="closeSideNav()">
+                <mat-icon class="sidenav-icon">settings</mat-icon> <span class="nav-caption">{{'MENU.CONFIGURATION' | translate }}</span>
+              </a>
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <mat-list class="wolf-mat-list">
+            <mat-list-item>
+              <a routerLink="/netconfig" (click)="closeSideNav()"><mat-icon class="sidenav-icon">cell_wifi</mat-icon><span class="mat-list-item-title"> {{'MENU.NET' | translate}}</span></a>
+            </mat-list-item>
+            <mat-list-item>
+              <a routerLink="/wolfconfig" (click)="closeSideNav()"><img src="assets/img/favicon.ico" class="sidenav-icon"><span class="mat-list-item-title"> {{'MENU.WOLF' | translate}}</span></a>
+            </mat-list-item>
+            <mat-list-item>
+              <a routerLink="/cloud-plugin" (click)="closeSideNav()"><mat-icon class="sidenav-icon">cloud</mat-icon><span class="mat-list-item-title"> {{'MENU.CLOUDPLUGINS' | translate}}</span></a>
+            </mat-list-item>
+            <mat-list-item>
+              <a routerLink="/field-plugin" (click)="closeSideNav()"><mat-icon class="sidenav-icon">settings_input_component</mat-icon><span class="mat-list-item-title"> {{'MENU.FIELDPLUGINS' | translate}}</span></a>
+            </mat-list-item>
+            <mat-list-item>
+              <a routerLink="/regmaps-list" (click)="closeSideNav()"><img src="assets/img/csv-icon.jpg" class="sidenav-icon"><span class="mat-list-item-title"> {{'MENU.REGISTERMAPS' | translate}}</span></a>
+            </mat-list-item>
+          </mat-list>
+        </mat-expansion-panel>
+      </mat-nav-list>
+    </mat-sidenav>
+    <mat-sidenav-content #content>
+      <main>
+        <mat-progress-bar *ngIf="isLoading" mode="indeterminate"></mat-progress-bar>
+        <router-outlet (activate)="onActivate($event)"></router-outlet>
+        <button mat-icon-button color="primary" class="scroll-to-top" *ngIf="isReturnToTopShow" (click)="scrollToTop();">
+          <mat-icon>keyboard_arrow_up</mat-icon>
+        </button>
+      </main>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</div>

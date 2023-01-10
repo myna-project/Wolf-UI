@@ -1,0 +1,38 @@
+<mat-progress-bar *ngIf="isLoading" mode="indeterminate"></mat-progress-bar>
+<div class="main-container horizontaly-centered">
+  <h2>{{ 'PLUGINS.TITLEFIELD' | translate }}</h2>
+  <mat-divider class="main-divider"></mat-divider>
+  <div class="centered-menu">
+    <mat-accordion multi>
+      <mat-expansion-panel *ngFor="let plugin of fieldPlugins" [expanded]="true">
+        <mat-expansion-panel-header >
+          <mat-panel-title>
+            {{plugin}}
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <mat-list *ngIf="fieldDict[plugin]" class="mat-list wolf-list">
+          <mat-list-item *ngFor="let section of fieldDict[plugin]" class="mat-list-item">
+            <div class="mat-list-item-content">
+              <span class="mat-list-item-title">{{section}}</span>
+              <span class="mat-list-item-right">
+                <button mat-stroked-button color="primary" (click)="showDetail(plugin, section)">
+                  <mat-icon>edit</mat-icon>
+                  {{ 'PLUGINS.MODIFY' | translate }}
+                </button>
+              </span>
+            </div>
+            <span class="mat-list-item-divider">
+              <mat-divider></mat-divider>
+            </span>
+          </mat-list-item>
+        </mat-list>
+        <span class="button-row-right">
+          <button mat-raised-button (click)="showDetail(plugin, null)" class="plugins-section-button">{{ 'PLUGINS.ADDSECTION' | translate }}</button>
+        </span>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </div>
+  <div class="button-row-right">
+    <button mat-raised-button (click)="goBack()" tabindex="-1">{{ 'DIALOG.BACK' | translate }}</button>
+  </div>
+</div>

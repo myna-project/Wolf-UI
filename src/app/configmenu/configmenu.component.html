@@ -1,0 +1,60 @@
+<mat-progress-bar *ngIf="isLoading" mode="indeterminate"></mat-progress-bar>
+<div class="main-container horizontaly-centered">
+  <h2>{{ 'CONFIGURATION.TITLE' | translate }}</h2>
+  <mat-divider class="main-divider"></mat-divider>
+  <mat-list *ngIf="!isLoading" class="mat-list wolf-list centered-menu">
+    <mat-list-item class="mat-list-item">
+      <div class="mat-list-item-content">
+        <span class="mat-list-item-title">
+          <button mat-mini-fab color="primary" class="button-list" (click)="goToNetConfig()">
+            <mat-icon class="mat-list-item-title-icon">cell_wifi</mat-icon>
+          </button>
+          <span class="mat-list-item-bold-title">{{ 'CONFIGURATION.NET' | translate }}</span>
+        </span>
+      </div>
+    </mat-list-item>
+    <mat-list-item class="mat-list-item">
+      <div class="mat-list-item-content">
+        <span class="mat-list-item-title">
+          <button mat-mini-fab color="primary" class="button-list" (click)="goToWolfConfig()">
+            <img class="mat-list-item-title-icon" src="assets/img/favicon.ico">
+          </button>
+          <span class="mat-list-item-bold-title">{{ 'CONFIGURATION.WOLF' | translate }}</span>
+        </span>
+      </div>
+    </mat-list-item>
+    <mat-list-item class="mat-list-item">
+      <div class="mat-list-item-content">
+        <span class="mat-list-item-title">
+          <button mat-mini-fab color="primary" class="button-list" (click)="goToCloudPlugins()">
+            <mat-icon class="mat-list-item-title-icon">cloud</mat-icon>
+          </button>
+          <span class="mat-list-item-bold-title">{{ 'CONFIGURATION.CLOUDPLUGINS' | translate }}</span>
+        </span>
+      </div>
+    </mat-list-item>
+    <mat-list-item class="mat-list-item">
+      <div class="mat-list-item-content">
+        <span class="mat-list-item-title">
+          <button mat-mini-fab color="primary" class="button-list" (click)="goToFieldPlugins()">
+            <mat-icon class="mat-list-item-title-icon">settings_input_component</mat-icon>
+          </button>
+          <span class="mat-list-item-bold-title">{{ 'CONFIGURATION.FIELDPLUGINS' | translate }}</span>
+        </span>
+      </div>
+    </mat-list-item>
+    <mat-list-item class="mat-list-item">
+      <div class="mat-list-item-content">
+        <span class="mat-list-item-title">
+          <button mat-mini-fab color="primary" class="button-list" (click)="goToRegisterMaps()">
+            <img class="mat-list-item-title-icon" src="assets/img/csv-icon.jpg">
+          </button>
+          <span class="mat-list-item-bold-title">{{ 'CONFIGURATION.REGISTERMAPS' | translate }}</span>
+        </span>
+      </div>
+    </mat-list-item>
+  </mat-list>
+  <div class="button-row-right">
+    <button mat-raised-button (click)="goBack()" tabindex="-1">{{ 'DIALOG.BACK' | translate }}</button>
+  </div>
+</div>
